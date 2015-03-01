@@ -84,7 +84,7 @@ int main ( int argc, char *argv[] )  {
 
   int i, ch, fd, fl;
   int ss, mm, hh, wd, d, m, y;
-  char dev[] = "/dev/iic0";
+  char dev[] = "/dev/iic1";
   uint8_t buf;
   uint16_t slave = 0x68;
   time_t tloc;
