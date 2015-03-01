@@ -1,3 +1,9 @@
+/*
+
+UPDATE Waitman Gobble <ns@waitman.net>
+default is READ, and sets system time
+
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -84,8 +90,11 @@ int main ( int argc, char *argv[] )  {
   time_t tloc;
   struct tm *ptm;
 
+if ( argc == 1 )  {
+        fl = READ;
+ } else {
 
-  if ( argc == 1 )  usage(argv[0]);
+
 
   while ( (ch = getopt(argc, argv, "hrsa:f:")) != -1 )  {
     switch (ch)  {
@@ -98,9 +107,14 @@ int main ( int argc, char *argv[] )  {
       case 'f': strcpy( dev, optarg );
                 break;
       case 'h':
-      default:  usage(argv[0]);
+		usage(argv[0]);
+		break;
+	default: 
+		fl = READ;
+		break;
     }
   }
+}
   
   if ( (fd = open(dev, O_RDWR)) < 0 )  {
     perror("open");
@@ -146,7 +160,11 @@ int main ( int argc, char *argv[] )  {
     i2c_read( fd, slave, 6, &buf );
     y = 2000 + bcd2bin(buf);
 
-    printf("%.2d:%.2d:%.2d %.2d/%.2d/%.4d\n", hh, mm, ss, d, m, y );
+char buffer[100];
+int cx;
+cx = snprintf(buffer, 100, "date %.4d%.2d%.2d%.2d%.2d.%.2d", y, m, d, hh, mm, ss);
+system(buffer);
+
     
     exit(0);
   }
